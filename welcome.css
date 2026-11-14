@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url("house-background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+}
+
+.content h1 {
+    font-size: 55px;
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+}
+
+.content p {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.buttons a {
+    text-decoration: none;
+    color: white;
+    background: #2563eb;
+    padding: 14px 35px;
+    border-radius: 8px;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.buttons a:hover {
+    background: #1d4ed8;
+    transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+    .content h1 {
+        font-size: 35px;
+    }
+
+    .content p {
+        font-size: 17px;
+    }
+}

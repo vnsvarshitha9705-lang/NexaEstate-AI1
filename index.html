@@ -1,0 +1,1008 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NexaEstate AI</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chatbot CSS -->
+<link rel="stylesheet" href="chatbot.css">
+
+    <!-- Leaflet Map CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="top-header">
+
+<div class="logo">
+    NEXA<span>ESTATE AI</span>
+</div>
+
+    <p>Smart Real Estate Price Prediction</p>
+
+    <span class="ai-label">AI POWERED</span>
+
+    
+<div class="account-links" id="accountLinks">
+
+    <a href="login.html" id="loginLink">Login</a>
+
+    <a href="signup.html" id="signupLink">Sign Up</a>
+
+    <button
+        type="button"
+        id="logoutButton"
+        onclick="logoutUser()"
+        style="display: none;"
+    >
+        Logout
+    </button>
+
+</div>
+
+</header>
+
+
+<main class="page-container">
+
+    <!-- WELCOME SECTION -->
+    <section class="welcome">
+
+        <div>
+            <h1>Welcome to NexaEstate AI</h1>
+
+            <p>
+                Enter house details, predict prices and manage
+                your property estimates.
+            </p>
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         FEATURE 1, 2 AND 5
+    ====================================== -->
+
+    <div class="workspace">
+
+        <!-- FEATURE 1: HOUSE DETAILS -->
+
+        <section class="panel details-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <h2>House Details</h2>
+                    <p>Enter property information</p>
+                </div>
+
+            </div>
+
+
+            <label for="city">City</label>
+
+            <select id="city">
+                <option value="hyderabad">Hyderabad</option>
+                <option value="bangalore">Bangalore</option>
+                <option value="chennai">Chennai</option>
+                <option value="mumbai">Mumbai</option>
+            </select>
+
+
+            <label for="locality">Locality</label>
+
+            <input
+                type="text"
+                id="locality"
+                placeholder="Example: gachibowli"
+            >
+
+
+            <label for="area">Area (sq.ft)</label>
+
+            <input
+                type="number"
+                id="area"
+                min="1"
+                placeholder="Enter area"
+            >
+
+
+            <label for="bedrooms">Bedrooms (BHK)</label>
+
+            <input
+                type="number"
+                id="bedrooms"
+                min="1"
+                placeholder="Enter bedrooms"
+            >
+
+
+            <label for="bathrooms">Bathrooms</label>
+
+            <input
+                type="number"
+                id="bathrooms"
+                min="1"
+                placeholder="Enter bathrooms"
+            >
+
+
+            <label for="floor">Floor</label>
+
+            <input
+                type="number"
+                id="floor"
+                min="0"
+                placeholder="Enter floor"
+            >
+
+
+            <label for="age">Building Age (years)</label>
+
+            <input
+                type="number"
+                id="age"
+                min="0"
+                placeholder="Enter building age"
+            >
+
+
+            <button
+                class="primary-button"
+                id="predictButton"
+                type="submit"
+                onclick="predictPrice()"
+            >
+                Predict House Price
+            </button>
+
+
+            <div class="prediction-result">
+
+                <p>Estimated Property Value</p>
+
+                <h3 id="result">
+                    Predicted Price will appear here
+                </h3>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- FEATURE 2: PROPERTY PREDICTIONS -->
+
+        <section class="panel listing-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <h2>Property Predictions</h2>
+                    <p>Your saved house price estimates</p>
+                </div>
+
+            </div>
+
+
+            <div class="listing-toolbar">
+
+                <span id="historyCount">
+                    0 properties found
+                </span>
+
+                <button
+                    class="clear-button"
+                    type="button"
+                    onclick="clearHistory()"
+                >
+                    Clear History
+                </button>
+
+            </div>
+
+
+            <div
+                id="historyList"
+                class="history-list"
+            ></div>
+
+        </section>
+
+
+
+        <!-- FEATURE 5: PROPERTY FILTERS -->
+
+        <aside class="panel filter-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <h2>Property Filters</h2>
+                    <p>Refine your search</p>
+                </div>
+
+            </div>
+            
+
+            <!-- PRICE FILTER -->
+
+            <div class="filter-group">
+
+                <h3>Price Range (Lakhs)</h3>
+
+                <div class="range-inputs">
+
+                    <input
+                        type="number"
+                        id="minPrice"
+                        min="0"
+                        placeholder="Min"
+                    >
+
+                    <input
+                        type="number"
+                        id="maxPrice"
+                        min="0"
+                        placeholder="Max"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CITY FILTER -->
+
+            <div class="filter-group">
+
+                <h3>City</h3>
+
+                <select id="filterCity">
+
+                    <option value="all">All Cities</option>
+                    <option value="hyderabad">Hyderabad</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="chennai">Chennai</option>
+                    <option value="mumbai">Mumbai</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- LOCALITY FILTER -->
+
+            <div class="filter-group">
+
+                <h3>Locality</h3>
+
+                <input
+                    type="text"
+                    id="searchLocality"
+                    placeholder="Search locality..."
+                >
+
+            </div>
+
+
+            <!-- BEDROOM FILTER -->
+
+            <div class="filter-group">
+
+                <h3>Bedrooms (BHK)</h3>
+
+                <div class="range-inputs">
+
+                    <input
+                        type="number"
+                        id="minBedrooms"
+                        min="0"
+                        placeholder="Min"
+                    >
+
+                    <input
+                        type="number"
+                        id="maxBedrooms"
+                        min="0"
+                        placeholder="Max"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- BATHROOM FILTER -->
+
+            <div class="filter-group">
+
+                <h3>Bathrooms</h3>
+
+                <div class="range-inputs">
+
+                    <input
+                        type="number"
+                        id="minBathrooms"
+                        min="0"
+                        placeholder="Min"
+                    >
+
+                    <input
+                        type="number"
+                        id="maxBathrooms"
+                        min="0"
+                        placeholder="Max"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- AREA FILTER -->
+
+            <div class="filter-group">
+
+                <h3>Area (sq.ft)</h3>
+
+                <div class="range-inputs">
+
+                    <input
+                        type="number"
+                        id="minArea"
+                        min="0"
+                        placeholder="Min"
+                    >
+
+                    <input
+                        type="number"
+                        id="maxArea"
+                        min="0"
+                        placeholder="Max"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- BUILDING AGE FILTER -->
+
+            <div class="filter-group">
+
+                <h3>Maximum Building Age</h3>
+
+                <input
+                    type="number"
+                    id="maxAge"
+                    min="0"
+                    placeholder="Age in years"
+                >
+
+            </div>
+
+
+            <!-- SORT FILTER -->
+
+            <div class="filter-group">
+
+                <h3>Sort By Price</h3>
+
+                <select id="sortPrice">
+
+                    <option value="default">Default Order</option>
+                    <option value="low">Price: Low to High</option>
+                    <option value="high">Price: High to Low</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FILTER BUTTONS -->
+
+            <div class="filter-actions">
+
+                <button
+                    class="reset-button"
+                    type="button"
+                    onclick="resetHistoryFilters()"
+                >
+                    Reset
+                </button>
+
+
+                <button
+                    class="apply-button"
+                    type="button"
+                    onclick="applyHistoryFilters()"
+                >
+                    Apply
+                </button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+
+    <!-- =====================================
+         FEATURE 3: PRICE COMPARISON
+    ====================================== -->
+
+    <section class="panel dashboard-section">
+
+        <div class="panel-heading">
+
+            <div>
+                <h2>Price Comparison</h2>
+
+                <p>
+                    Compare your saved house predictions
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="priceChart"></canvas>
+
+        </div>
+
+
+        <p id="chartMessage">
+            Make predictions to view the chart.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================
+         FEATURE 4: PROPERTY STATISTICS
+    ====================================== -->
+
+    <section class="statistics-section">
+
+        <div class="section-heading">
+
+            <h2>Property Statistics</h2>
+
+            <p>
+                Summary of your saved predictions
+            </p>
+
+        </div>
+
+
+        <div class="dashboard">
+
+
+            <div class="stat-card">
+
+                <span>Total Properties</span>
+
+                <h3 id="totalHouses">0</h3>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>Average Price</span>
+
+                <h3 id="averagePrice">
+                    ₹0.00 Lakhs
+                </h3>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>Highest Price</span>
+
+                <h3 id="highestPrice">
+                    ₹0.00 Lakhs
+                </h3>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>Lowest Price</span>
+
+                <h3 id="lowestPrice">
+                    ₹0.00 Lakhs
+                </h3>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================
+         FEATURE 6: NEARBY FACILITIES FINDER
+    ====================================== -->
+
+    <section class="facilities-section">
+
+        <div class="section-heading">
+
+            <h2>Nearby Facilities Finder</h2>
+
+            <p>
+                Find important facilities around your
+                property location.
+            </p>
+
+        </div>
+
+
+        <div class="facilities-workspace">
+
+
+            <!-- LEFT SIDE: MAP -->
+
+            <div class="panel map-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h2>Location Map</h2>
+
+                        <p>
+                            Nearby places around your selected location
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div id="facilityMap"></div>
+
+
+                <p class="map-note">
+                    Map data © OpenStreetMap contributors
+                </p>
+
+            </div>
+
+
+
+            <!-- RIGHT SIDE: SEARCH -->
+
+            <div class="panel facility-search-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h2>Search Facilities</h2>
+
+                        <p>
+                            Find nearby services and places
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- LOCATION INPUT -->
+
+                <label for="facilityLocation">
+                    Search Location
+                </label>
+
+                <input
+                    type="text"
+                    id="facilityLocation"
+                    placeholder="Enter locality or area"
+                >
+
+
+                <!-- CITY SELECTION -->
+
+                <label for="facilityCity">
+                    Select City
+                </label>
+
+                <select id="facilityCity">
+
+                    <option value="hyderabad">Hyderabad</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="chennai">Chennai</option>
+                    <option value="mumbai">Mumbai</option>
+
+                </select>
+
+
+                <!-- FACILITY SELECTION -->
+
+                <label for="facilityType">
+                    Select Facility
+                </label>
+
+                <select id="facilityType">
+
+                    <option value="school">Schools</option>
+                    <option value="hospital">Hospitals</option>
+                    <option value="shopping">Shopping Malls</option>
+                    <option value="park">Parks</option>
+                    <option value="bus">Bus Stops</option>
+                    <option value="railway">Railway Stations</option>
+
+                </select>
+
+
+                <!-- SEARCH BUTTON -->
+
+                <button
+                    type="button"
+                    class="primary-button"
+                    id="facilitySearchButton"
+                    onclick="searchNearbyFacilities()"
+                >
+                    Search Nearby Facilities
+                </button>
+
+
+                <!-- SEARCH STATUS -->
+
+                <div
+                    id="facilityStatus"
+                    class="facility-status"
+                >
+                    Enter a location and select a facility.
+                </div>
+
+
+                <!-- SEARCH RESULTS -->
+
+                <div class="facility-results">
+
+                    <h3>Search Results</h3>
+
+                    <div id="facilityResultsList">
+
+                        <p class="empty-facilities">
+                            No facilities searched yet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURE 8: FAVORITE PROPERTIES -->
+
+<section id="favorites-section">
+
+    <h2>❤️ My Favorite Properties</h2>
+
+    <p class="favorite-subtitle">
+        Your saved properties are displayed here.
+    </p>
+
+    <div id="favorites-container">
+
+        <!-- Favorite properties will appear here -->
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     FEATURE 9: HOUSE PRICE TREND ANALYSIS
+========================================= -->
+
+<section id="trend-analysis" class="trend-section">
+
+    <h2>House Price Trend Analysis</h2>
+    <p class="trend-subtitle">
+        Analyze monthly, yearly and city-wise house price changes.
+    </p>
+
+    <!-- PRICE STATISTICS -->
+    <div class="trend-stats">
+
+        <div class="trend-card">
+            <h3>Highest Price</h3>
+            <p id="highestTrendPrice">₹0</p>
+        </div>
+
+        <div class="trend-card">
+            <h3>Lowest Price</h3>
+            <p id="lowestTrendPrice">₹0</p>
+        </div>
+
+        <div class="trend-card">
+            <h3>Price Increase</h3>
+            <p id="priceIncreasePercent">0%</p>
+        </div>
+
+        <div class="trend-card">
+            <h3>Price Decrease</h3>
+            <p id="priceDecreasePercent">0%</p>
+        </div>
+
+    </div>
+
+    <!-- MONTHLY TRENDS -->
+    <div class="trend-chart-card">
+        <h3>Monthly Price Trends</h3>
+        <canvas id="monthlyTrendChart"></canvas>
+    </div>
+
+    <!-- YEARLY TRENDS -->
+    <div class="trend-chart-card">
+        <h3>Yearly Price Trends</h3>
+        <canvas id="yearlyTrendChart"></canvas>
+    </div>
+
+    <!-- CITY-WISE TRENDS -->
+    <div class="trend-chart-card">
+        <h3>City-wise Price Comparison</h3>
+        <canvas id="cityTrendChart"></canvas>
+    </div>
+
+    <!-- OVERALL TREND -->
+    <div class="trend-chart-card">
+        <h3>Overall House Price Trend</h3>
+        <canvas id="overallTrendChart"></canvas>
+    </div>
+
+    <p id="trendMessage" class="trend-message">
+        Your house price trends will appear here.
+    </p>
+
+</section>
+
+
+<!-- =========================================
+     FEATURE 10: SMART PROPERTY COMPARISON
+========================================= -->
+
+<section id="property-comparison" class="comparison-section">
+
+    <h2>Smart Property Comparison</h2>
+
+    <p>Select properties to compare their details.</p>
+
+    <div id="comparisonPropertyList">
+        <!-- Saved properties will appear here -->
+    </div>
+
+    <button id="comparePropertiesBtn" type="button">
+        Compare Properties
+    </button>
+
+    <div id="comparisonResult">
+        <!-- Comparison results will appear here -->
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     FEATURE 11: HOME LOAN EMI CALCULATOR
+========================================= -->
+
+<section id="emi-calculator" class="emi-section">
+
+    <h2>Home Loan EMI Calculator</h2>
+
+    <p class="emi-subtitle">
+        Calculate your monthly home loan EMI easily.
+    </p>
+
+    <div class="emi-container">
+
+        <div class="emi-inputs">
+
+            <label for="loanAmount">
+                Loan Amount (in Lakhs)
+            </label>
+
+            <input
+                type="number"
+                id="loanAmount"
+                placeholder="Example: 30"
+                min="0.01"
+                step="0.01"
+            >
+
+            <label for="interestRate">
+                Annual Interest Rate (%)
+            </label>
+
+            <input
+                type="number"
+                id="interestRate"
+                placeholder="Example: 8.5"
+                min="0"
+                step="0.01"
+            >
+
+            <label for="loanDuration">
+                Loan Duration (Years)
+            </label>
+
+            <input
+                type="number"
+                id="loanDuration"
+                placeholder="Example: 20"
+                min="1"
+                step="1"
+            >
+
+            <button id="calculateEMIButton" type="button">
+                Calculate EMI
+            </button>
+
+            <button id="resetEMIButton" type="button">
+                Reset
+            </button>
+
+            <p id="emiError" class="emi-error"></p>
+
+        </div>
+
+        <div class="emi-results">
+
+            <h3>Loan Calculation Results</h3>
+
+            <div class="emi-result-card">
+                <span>Monthly EMI</span>
+                <h2 id="monthlyEMI">₹0</h2>
+            </div>
+
+            <div class="emi-result-card">
+                <span>Total Interest</span>
+                <h2 id="totalInterest">₹0</h2>
+            </div>
+
+            <div class="emi-result-card">
+                <span>Total Payment</span>
+                <h2 id="totalPayment">₹0</h2>
+            </div>
+
+            <p id="emiSummary">
+                Enter loan details to calculate your EMI.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- =====================================
+     AI CHATBOT
+====================================== -->
+
+<!-- Floating Chatbot Button -->
+
+<button
+    id="chatbot-button"
+    type="button"
+    title="Open AI Assistant"
+>
+    💬
+</button>
+
+
+<!-- Chatbot Window -->
+
+<div id="chatbot-window">
+
+    <!-- Chatbot Header -->
+
+    <div class="chatbot-header">
+
+        <h3>🏠 Home Price Assistant</h3>
+
+        <button
+            id="chatbot-close"
+            type="button"
+            title="Close Chatbot"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <!-- Chat Messages -->
+
+    <div id="chatbot-messages">
+
+        <div class="chat-message bot">
+            Hello! Welcome to Home Price Estimator.
+            Ask me anything about this website and its features.
+        </div>
+
+    </div>
+
+
+    <!-- Chat Input -->
+
+    <div class="chatbot-input-area">
+
+        <input
+            type="text"
+            id="chatbot-input"
+            placeholder="Ask about house prices..."
+            maxlength="1000"
+        >
+
+        <button
+            id="chatbot-send"
+            type="button"
+        >
+            Send
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     JAVASCRIPT LIBRARIES
+====================================== -->
+
+<!-- Leaflet Map JavaScript -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<!-- Chart.js -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js">
+</script>
+
+<script>
+    console.log("HTML JavaScript is working");
+</script>
+
+<!-- Main Project JavaScript -->
+<script src="script.js"></script>
+<script src="chatbot.js"></script>
+
+</body>
+</html>

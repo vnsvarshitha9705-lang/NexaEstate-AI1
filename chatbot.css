@@ -1,0 +1,177 @@
+
+/* =====================================
+   1. CHATBOT FLOATING BUTTON
+===================================== */
+
+#chatbot-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 65px;
+    height: 65px;
+    border: none;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+    z-index: 9999;
+}
+
+/* =====================================
+   2. CHATBOT WINDOW
+===================================== */
+
+#chatbot-window {
+    position: fixed;
+    bottom: 105px;
+    right: 25px;
+    width: 350px;
+    height: 480px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+}
+
+/* Show chatbot */
+
+#chatbot-window.active {
+    display: flex;
+}
+
+/* =====================================
+   3. CHATBOT HEADER
+===================================== */
+
+.chatbot-header {
+    background: #2563eb;
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chatbot-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+#chatbot-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+/* =====================================
+   4. CHAT MESSAGE AREA
+===================================== */
+
+#chatbot-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* =====================================
+   5. MESSAGE BUBBLES
+===================================== */
+
+.chat-message {
+    max-width: 80%;
+    padding: 11px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background: #2563eb;
+    color: white;
+    border-bottom-right-radius: 3px;
+}
+
+.chat-message.bot {
+    align-self: flex-start;
+    background: white;
+    color: #222;
+    border: 1px solid #e5e7eb;
+    border-bottom-left-radius: 3px;
+}
+
+/* =====================================
+   6. INPUT AREA
+===================================== */
+
+.chatbot-input-area {
+    display: flex;
+    padding: 12px;
+    gap: 8px;
+    border-top: 1px solid #ddd;
+    background: white;
+}
+
+#chatbot-input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+}
+
+#chatbot-input:focus {
+    border-color: #2563eb;
+}
+
+#chatbot-send {
+    padding: 10px 15px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#chatbot-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* =====================================
+   7. MOBILE RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 450px) {
+
+    #chatbot-window {
+        width: calc(100% - 30px);
+        right: 15px;
+        bottom: 90px;
+        height: 70vh;
+    }
+
+    #chatbot-button {
+        right: 15px;
+        bottom: 15px;
+    }
+
+}
